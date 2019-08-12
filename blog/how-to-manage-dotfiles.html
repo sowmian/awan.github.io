@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7480055858131493",
+    enable_page_level_ads: true
+  });
+</script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to manage dotfiles securely</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="../../index.html">AK</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scrots">Scrots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../about.html">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('../img/dots.png')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>How to secure your dotfiles</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>Today I'm gonna talk about dotfiles. In unix world, most programs are configured command line and they save their configurations in homedir usually a file which names start with a dot. Thus dotfiles.</p>
+
+            <p>I have been using many systems and tried many programs to keep a backup of my dotfiles. Now I store my dotfiles in my server which is also a git, mail and web server but not all the users have one. So this post is for them.</p>
+            <p>So here I’m gonna show you how I store my encrypted dotfiles on github.</p>
+
+<h2 id="tools-required">Tools required:</h2>
+
+<blockquote>
+  <p>keybase, kbfs, gnupg2, git and some brain :P</p>
+</blockquote>
+
+<h2 id="how-to">How to:</h2>
+
+<p>I’m using Arch linux so assuming you’re running Arch, and you have knowledge about how gpg works. You must have a gpg keypair. Create an account on https://keybase.io and https://github.com if you haven’t yet.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># pacman -S kbfs keybase         # install them
+$ systemctl start kbfs           # start them
+$ systemctl start keybase
+$ keybase login                  # login to keybase
+$ keybase git create "myConfigs"  # Create repo
+</code></pre></div></div>
+
+<p>if you already have a git repo and you wanna use that, just go to the repo dir and rm -rf .git dir.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd "old repo"        # Go to old repo dir
+$ rm -rf .git          # delete the .git (old git data)
+$ git init             # Start new git repo
+$ git add .            # Add all data in the repo
+$ git remote add origin keybase://private/"your keybase username"/myConfig
+$ git commit -a -m "first commit"
+$ git push --set-upstream origin master
+</code></pre></div></div>
+
+<p>Well done.
+            You just created a encrypted repo. Let’s integrate it with github now.</p>
+
+<p>Go to https://github.com/ and create a new empty repo. After creating, just clone it to your computer.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd
+$ git clone "your Github username"@github.com:"your Github username"/"your new created repo"
+$ cd "your new created github repo(the one you just cloned)"
+</code></pre></div></div>
+
+<p>Configure git to allow keybase protocol:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git config --global --add protocol.keybase.allow always
+</code></pre></div></div>
+
+<p>While running these commands in your newly cloned github empty repo, we will add our encrypted keybase repo as a submodule to it.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule add keybase://private/"your keybase username"/myConfigs
+$ git add .
+$ git commit -m "added submodule myConfigs"
+$ git push --set-upstream origin master
+</code></pre></div></div>
+
+<p>Done. You’re now secured. Let’s check it out.</p>
+
+<p>Just delete the repo from computer, logout from keybase and clone the repo again. You’ll see nothing.</p>
+
+<h2 id="how-to-install-these-configs-on-new-system">How to install these configs on new system?</h2>
+
+<p>Download required tools, gnupg, keybase, git. Login to keybase, you may have to approve this new device from other logged device if you have another device logged in. Do that and do the following.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ keybase login
+$ git clone "your github unencrypted repository"
+$ cd "new cloned repository"
+$ git config --global --add protocol.keybase.allow always
+$ git submodule update --init
+
+</code></pre></div></div>
+
+<p>That’s it. Now you will have all your configs unencrypted in your new system.</p>
+
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/0x5CBC7BC7" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://facebook.com/0x5CBC7BC7" title="Facebook">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="mailto:abdullah@abdullah.today?Subject=Mail%20from%20website" title="Email Me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyleft &copy; All rights reversed. The internet is free and so is my content.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

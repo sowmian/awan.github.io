@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7480055858131493",
+    enable_page_level_ads: true
+  });
+</script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to use efistub in debian</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="../../index.html">AK</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scrots">Scrots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../about.html">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('../img/efistub.png')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>How to boot kernel without a bootmanager</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>So in this post I'm gonna guide you how you can use efistub, a feature which you can use to boot the kernel without an extra boot manager(grub, systemd-boot, rEFInd etc.).</p>
+            
+            <p>Create a boot entry using efibootmgr.</p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># efibootmgr --create --disk sda --part 1 --label Debian --loader /vmlinuz --unicode "root=/dev/sda2 rw initrd=\initrd.img" --verbose
+    </code></pre></div></div>
+    
+
+    <p>Explaination of the command.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+ 
+ --create 'creates a new boot entry'
+ --disk   'disk where you wanna create the boot entry'
+ --part   'partition number'
+ --label  'the label for new entry'
+ --loader 'loader to boot, it's vmlinuz in this example'
+ --unicode 'kernel parameters you can define here like initrd, swap, encrypted container for root'
+ --verbose 'let it verbose'
+    </code></pre></div></div> 
+
+
+    <p>I have an encrypted installation on my machine so here is how I create an entry for me.
+   
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># efibootmgr --create --disk sda --part 1 --label 'My Debian' --loader /vmlinuz --unicode "cryptdevice=UUID=XXXXXXXXXXXXXXXXXX:cryptlvm root=UUID=XXXXXXXXXXXXXXXXXX rw initrd=\initrd.img resume=UUID=XXXXXXXXXXXXXXXXX" --verbose
+    </code></pre></div></div>
+
+    where cryptdevice UUID is the UUID of my SSD's encrypted container's UUID and root's UUID is the UUID for my lvm volume where root is located, resume UUID is the lvm UUID where swap partition is. You can get UUID with blkid command. </p>
+
+
+    <p> Now go to /boot directory and check for the vmlinuz and initrd.img. They might be in child directories like if EFI/grub or maybe somewhere else depending on your current boot managers. and move them to /boot. Also change your fstab (/etc/fstab) so that it mount your boot partition on /boot. </p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># mv /boot/efi/grub/vmlinuz-4.19.0-1-rt-amd64 /boot/vmlinuz
+# mv /boot/efi/grub/initrd.img-4.9.0-8-amd64 /boot/initrd.img
+
+and your fstab should be look like this.
+
+UUID=XXXX-XXXX    /boot     vfat    umask=0077  0   1
+    </code></pre></div></div>
+
+    <p>By default, debian installs kernel and initrd images with their version numbers. But also puts a symlink to it in / with vmlinuz name. So we have to write a script so that if we get an update of kernel, it will automatically rename it to vmlinuz and initrd.img. Just create a script with following path and make it executable. </p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># vim /etc/kernel/postinst.d/update-efistub
+
+#!/bin/sh
+cp /vmlinuz /boot/
+
+save it and make it executable.
+
+# chmod +x /etc/kernel/postinst.d/update-efistub
+
+and do the same with initramfs.
+
+# vim /etc/initramfs/post-update.d/update-efistub
+
+#!/bin/sh
+cp /initrd.img /boot/
+
+make it executable.
+
+chmod +x /etc/initramfs/post-update.d/update-efistub
+    </code></pre></div></div>
+
+
+   <p>That's it. Now uninstall any extra boot manager and reboot. You'll see that your machine is booting without a boot manager. Yeah, you heard it right. No sensible person will call it bootloader. They are just boot managers which also create an entry just like we did. So why don't we do it ourselves. Feel free to mail me if you get some errors. </p>
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/0x5CBC7BC7" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://facebook.com/0x5CBC7BC7" title="Facebook">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="mailto:abdullah@abdullah.today?Subject=Mail%20from%20website" title="Email Me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyleft &copy; All rights reversed. The internet is free and so is my content.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

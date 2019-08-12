@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7480055858131493",
+    enable_page_level_ads: true
+  });
+</script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mutt Setup</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="../../index.html">AK</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scrots">Scrots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../about.html">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/img/scrots/rxvt+.png')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>Mutt - A mail client that suck less</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>Mutt is text-based mail client with a lot of powerful features. It has SMTP support when compiled with --enable-smtp flag.You can use other applications to send mail if you want. Today in this article, I'll guide you how you can configure it.</p>
+            
+<<<<<<< HEAD
+<p>Most distributions package it with ncurses. I prefer compiling it with slang. If you're interested, here is my port for crux.</p>
+
+
+=======
+            <p>Most distributions package it with ncurses. I prefer compiling it with slang. If you're interested, here is my port for crux.</p>
+>>>>>>> ca2795ce45937347b6d335291dd2a1f8c159cb38
+<center><pre><span class="ps1">abdullah at </span><span class="ps2">ak in ~/git/ports/mutt (master) $  </span>cat Pkgfile 
+# Description: Text-based email client that sucks less
+# URL:         http://www.mutt.org
+# Maintainer:  Abdullah abdullah at abdullah dot today
+# Depends on:  gdbm openssl zlib
+
+name=mutt
+version=1.11.3
+release=1
+source=(https://bitbucket.org/mutt/mutt/downloads/$name-$version.tar.gz)
+
+build () {
+cd $name-$version
+
+./configure --prefix=/usr \
+ --with-docdir=/usr/share/mutt \
+ --with-mailpath=/var/spool/mail \
+ --with-slang \
+ --enable-pop \
+ --enable-imap \
+ --with-ssl \
+ --enable-hcache \
+ --disable-nls \
+ --enable-sidebar \
+ --enable-smtp  \
+ --with-sasl \
+ --with-gnutls
+
+make
+make DESTDIR=$PKG install
+find $PKG/usr/share/mutt/* ! -name manual.txt -delete
+rm $PKG/usr/etc/{Muttrc,mime.types}.dist 
+rm -r $PKG/usr/share/info
+rm $PKG/usr/share/man/man5/{mmdf.5,mbox.5}
+}
+<span class="ps1">abdullah at</span><span class="ps2"> ~/git/ports/mutt (master) $ </span></pre></center>
+
+                <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/0x5CBC7BC7" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://facebook.com/0x5CBC7BC7" title="Facebook">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="mailto:abdullah@abdullah.today?Subject=Mail%20from%20website" title="Email Me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyleft &copy; All rights reversed. The internet is free and so is my content.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

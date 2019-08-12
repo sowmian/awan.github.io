@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to install CRUX fully encrypted</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">AK</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scrots">Scrots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about.html">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/img/dots.png')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+
+              <h2> How to install fully encrypted CRUX </h2>
+              <p>This post is for crux users who wanna secure their crux installation. </p>
+
+              <h3>Partitioning</h3>
+              <p> I'm gonna use two partitions. First boot partition will be unencrypted which holds kernel. I use secure boot with my own keys. You can find a post in my blog how to do that. and I have some ports at https://abdullah.today/ports for secure boot. </p>
+
+
+              <h4>Boot unencrypted Partition</h4>
+
+              <p> Create a partition more than 200 Mbs for boot ESP with gdisk code ef00. </p>
+
+              <p> Let's create a FAT filesystem on it for EFI. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># mkfs.fat -F32 /dev/sda1
+</code></pre></div></div>
+
+                <h4>Encrypted Partition</h4>
+              <p> Create an encrypted LUKS container </p>
+             <div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># cryptsetup luksFormat /dev/sda2
+    </code></pre></div></div>
+    <p>Type uppercase "YES" and then enter passphrase two times. </p>
+
+    <p> Open the encrypted container. </p>
+    <div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># cryptsetup open /dev/sda2 crux 
+    </code></pre></div></div>
+
+    <p> Now the encrypted container is available at /dev/mapper/crux so lets create some lvm stuff and create filesystems and a swap partition.</p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># pvcreate /dev/mapper/crux
+# vgcreate ak /dev/mapper/crux
+# lvcreate -L 8G ak -n swap
+# lvcreate -L 50G ak -n root
+# lvcreate -l 100%FREE ak -n home
+# mkfs.ext4 /dev/ak/root -L crux-root
+# mkfs.ext4 /dev/ak/home -L crux-home
+# mkswap /dev/ak/swap -L crux-swap
+</code></pre></div></div>
+
+<p> Mount the partitions and start installations. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># mount /dev/mapper/ak-root /mnt
+# mkdir /mnt/{boot,home}
+# mount /dev/mapper/ak-home /mnt/home
+# mount /dev/sda1 /mnt/boot
+# swapon /dev/mapper/ak-swap
+</code></pre></div></div>
+
+<h3> Base system installation </h3>
+<p> Start installation. Type "setup" and select "YES". Install all packages. Make sure you get no error messages once installation is finished.</p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># setup
+</code></pre></div></div>
+
+<h3> Chroot </h3>
+
+<p> Enter chroot. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># setup-chroot
+</code></pre></div></div>
+
+<h4>fstab</h4>
+<p> Check fstab by going to /etc/fstab. Open it with vim. You'll see two uncommented entries there. Leave them as it is. In vim prompt mode just type :r! blkid and you'll get UUIDs of all partitions. Add them there for root, home, boot and swap partitions. </p>
+
+<h4>locales</h4>
+<p> Generate locales. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code> # localedef -i en_US -f ISO-8859-1 en_US
+ # localedef -i en_US -f ISO-8859-1 en_US.ISO-8859-1
+ # localedef -i en_US -f UTF-8 en_US.UTF-8 
+</code></pre></div></div>
+
+<h4>rc.conf</h4>
+<p> Edit rc.conf. Mine looks like this. </p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># vim /etc/rc.conf
+
+#
+# /etc/rc.conf: system configuration
+#
+
+FONT=ter-v22n
+KEYMAP=us
+TIMEZONE=Asia/Karachi
+HOSTNAME=cruz
+SYSLOG=sysklogd
+SERVICES=(crond wifi acpid )
+
+# End of file
+</code></pre></div></div>
+
+<h4>resolv.conf</h4>
+<p> Edit /etc/resolv.conf. I'm using OpenDNS nameserver here. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># vim /etc/resolv.conf
+
+nameserver 208.67.222.222
+</code></pre></div></div>
+
+<h4>wifi</h4>
+<p> For wireless connection, you can use wpa_supplicant. For example if your interface is wlp3s0 and SSID is nix, add passphrase to it using wpa_passphrase like this. </p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># wpa_passphrase nix >> /etc/wpa_supplicant.conf
+Reading from STDIN  # Type your passphrase.
+
+# wpa_supplicant -i wlp3s0 -B -c /etc/wpa_supplicant.conf
+# dhcpcd wlp3s0
+</code></pre></div></div>
+
+<h3>Kernel</h3>
+<p> Compile the kernel now. Go to the /usr/src/linux directory. Configure the kernel config. Since we are gonna have an encrypted installation, we need some extra drivers. Invoke 'make menuconfig' and enable these options. And also enable what is needed for your hardware. I'll add only options needed for encryption here. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code>
+
+General setup --->
+
+  [*] Initial RAM filesystem and RAM disk (iniramfs/initrd) support
+
+
+Device Drivers --->
+
+  Multiple devices driver support (RAID and LVM) --->
+    [*] Device mapper support
+    [*] Crypt target support
+
+Cryptographic API ---> 
+  
+  -*- CBC support
+  <*> SHA224 and SHA256 digest algorithm
+  <*> AES cipher algorithms
+</code></pre></div></div>
+
+<p> You can get my kernel config from https://gitlab.com/Abdullah/cfg/raw/master/kernel/config by using wget and then edit it as per your hardware. This one is for Thinkpad with SSD. </p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># wget https://gitlab.com/Abdullah/cfg/raw/master/kernel/config > .config 
+
+</code></pre></div></div>
+
+<p> After you're done with configuring kernel, compile it. Once it's compiled, copy it to /boot directory and install modules. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># make -j8
+# make modules_install
+# cp arch/x86/boot/bzImage /boot/vmlinuz
+# cp System.map /boot
+</code></pre></div></div>
+
+
+<h3>Users and package management </h3>
+
+<h4> Root password and a normal user</h4>
+
+<p> Set root password. Create our first user. And then we will create a second user for package management. </p>
+
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># passwd
+# useradd -G wheel,audio,video -m -U abdullah
+# passwd abdullah
+</code></pre></div></div>
+
+<h4> Give new user sudo access </h4>
+<p> Add new created user to sudoers. Uncomment this line in /etc/sudoers.</p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code>
+%wheel ALL=(ALL) ALL
+</code></pre></div></div>
+
+<h4> User for creating packages </h4>
+
+<p> Now let's create a user for package management. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># groupadd pkgmk
+# useradd -m -g pkgmk pkgmk
+</code></pre></div></div>
+
+<p> Add our user to this newly created group. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># usermod -aG pkgmk abdullah
+</code></pre></div></div>
+
+<h4> fakeroot </h4>
+<p> Edit /etc/prt-get.conf to set up fakeroot building. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># makecommand sudo -H -u pkgmk /usr/bin/fakeroot /usr/bin/pkgmk
+</code></pre></div></div>
+
+<p> Edit /etc/pkgmk.conf. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code> # vim /etc/pkgmk.conf
+
+PKGMK_SOURCE_DIR="/home/pkgmk/distfiles"
+PKGMK_PACKAGE_DIR="/home/pkgmk/packages"
+PKGMK_WORK_DIR="/home/pkgmk/work/$name"
+</code></pre></div></div>
+
+<p> Create those directories. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># mkdir /home/pkgmk/{distfiles,packages,work}
+# chown pkgmk:pkgmk /home/pkgmk/*
+# chmod 775 /home/pkgmk/*
+</code></pre></div></div>
+
+<p> Enable contrib repository. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># mv /etc/ports/contrib.rsync.inactive /etc/ports/contrib.rsync
+</code></pre></div></div>
+
+<p> Add my custom ports repository. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># echo "ROOT_DIR=/usr/ports/ak\nURL=https://abdullah.today/ports" > /etc/ports/ak.httpup
+</code></pre></div></div>
+
+<p> Enable contrib and my repository by editing /etc/prt-get.conf. Uncomment the line which says "prtdir /usr/ports/contrib" and add this line on top of the other port directories path. "prtdir /usr/ports/ak". Also don't forget to uncomment the line which says, "runscripts yes". After editing the file, it should be look like this.  </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code> 
+
+###
+### prt-get conf
+###
+
+# note: the order matters: the package found first is used
+prtdir /usr/ports/ak
+prtdir /usr/ports/core
+prtdir /usr/ports/opt
+prtdir /usr/ports/xorg
+
+# the following line enables the multilib compat-32 collection
+#prtdir /usr/ports/compat-32
+
+# the following line enables the user maintained contrib collection
+prtdir /usr/ports/contrib
+
+### use mypackage form local directory
+# prtdir /home/packages/build:mypackage
+
+### log options:
+# writelog enabled         # (enabled|disabled)
+# logmode  overwrite       # (append|overwrite)
+# rmlog_on_success yes     # (no|yes)
+logfile  /var/log/pkgbuild/%n.log
+                           # path, %p=path to port dir, %n=port name
+                           #       %v=version, %r=release
+
+### use alternate cache file (default: /var/lib/pkg/prt-get.cache
+# cachefile /mnt/nfs/cache
+
+### print README information:
+# readme verbose           # (verbose|compact|disabled)
+
+### prefer higher versions in sysup / diff
+# preferhigher no      # (yes|no)
+
+### use regexp search
+# useregex no        # (yes|no)
+
+### run pre- and post-installs scripts; yes is equivalent to the
+### --install-scripts option
+runscripts yes            # (no|yes)
+
+
+### EXPERT SECTION ###
+
+### alternative commands
+# makecommand      pkgmk
+# addcommand       pkgadd
+# removecommand    pkgrm
+# runscriptcommand sh
+makecommand sudo -H -u pkgmk /usr/bin/fakeroot /usr/bin/pkgmk
+</code></pre></div></div>
+
+<p> Sync ports now. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># ports -u
+</code></pre></div></div>
+
+<p> Get fakeroot installed if you don't have yet. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># prt-get install fakeroot
+</code></pre></div></div>
+
+<h3> Dracut </h3>
+<p> Get dracut and create an initramfs. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># prt-get depinst dracut
+# dracut initramfs.img
+</code></pre></div></div>
+
+<h3> Bootloader </h3>
+<p> I'm using EFISTUB. If you're using some other boot manager like grub, consult their wiki. There are some dracut related variables in this example. I'd recommand, create a new file with vim, and then in prompt mode, type :r! blkid so you'll get all UUIDs there in the file. Just copy them in the new file, delete other lines and save it. Then redirect this file's output to shell like this, 'cat newCreatedFile | sh'. It will create a new entry. root-UUID=<root volume uuid>, rd.luks.uuid=<luks partition uuid>, and rd.lvm.vg=<volume group name>. For EFISTUB, create an entry like this. </p>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># efibootmgr --create --disk /dev/sda --part 1 --label 'CRUX-Encrypted' --loader /vmlinuz --unicode "root=UUID=XXXX-XXXX-XXXX-XXX rw resume=UUID=XXXX-XXXX-XXXX-XXXX rd.luks.uuid=XXXX-XXXX-XXXX-XXXX rd.lvm.vg=ak" --verbose
+</code></pre></div></div>
+
+
+<h3> Congrats! </h3>
+<p> Congrats! You have now a fully encrypted system. Reboot now. If you have some problems, just send me an email and I'll be glad to help. </p>
+
+
+
+
+ <!-- Footer -->
+   <footer>
+     <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/0x5CBC7BC7" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://facebook.com/0x5CBC7BC7" title="Facebook">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="mailto:abdullah@abdullah.today?Subject=Mail%20from%20website" title="Email Me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyleft &copy; All rights reversed. The internet is free and so is my content.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

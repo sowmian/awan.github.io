@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export PYTHONPATH=/usr/lib/python3.6/site-packages
+exec /usr/bin/qutebrowser-script "$@"

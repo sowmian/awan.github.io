@@ -1,0 +1,13 @@
+README for Packet Tracer
+
+REQUIREMENTS
+
+   Download the Packet Tracer from
+   - https://www.netacad.com/group/offerings/packet-tracer/
+
+   rename it as packettracer.tar.gz
+   and put the file 
+   - packetracer.tar.gz
+   
+   into the directory defined by PKGMK_SOURCE_DIR. See pkgmk.conf(5).
+

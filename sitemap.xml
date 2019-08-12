@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://abdullah.today/</loc>
+  <lastmod>2019-03-31T21:41:22+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/index.html</loc>
+  <lastmod>2019-03-31T21:41:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/scrots/index.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/about.html</loc>
+  <lastmod>2019-03-06T12:54:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-manage-dotfiles.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-direct-boot-kernel-with-efi.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-manage-site-using-git.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-use-raspberrypi-without-a-monitor.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/rxvt-unicode.html</loc>
+  <lastmod>2019-03-14T23:00:04+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/dwm.html</loc>
+  <lastmod>2019-03-15T21:36:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-use-mailto-links-in-DWM.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-include-screenshot-in-git-repo.html</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/rxvt-unknown-terminal-type.html</loc>
+  <lastmod>2019-03-10T04:22:04+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-use-dwm.html</loc>
+  <lastmod>2019-03-13T12:04:38+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/blog/how-to-install-crux-fully-encrypted.html</loc>
+  <lastmod>2019-03-31T21:00:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://abdullah.today/scrots/</loc>
+  <lastmod>2019-03-06T09:00:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>

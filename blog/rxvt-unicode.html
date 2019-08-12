@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>rxvt-unicode</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="../../index.html">AK</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scrots">Scrots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../about.html">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/img/scrots/rxvt+.png')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>rxvt-unicode - Terminal emulator for geeks</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p>As a linux user, I spend most of my time in terminal emulators. There are alot of emulators available today but none can beat rxvt-unicode.</p>
+            
+            <p>The biggest problem most new linux users face is how to configure it. Today I'll explain how you can use it to your needs.</p>
+            
+            <p>Most distros package it with less features enabled. I always compile it from source. So let's start and in the end you'll end up with a perfect terminal emulator.</p>
+
+            <h3>Get the source and compile it.</h3>
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code>$ wget http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-9.22.tar.bz2
+$ tar xvf rxvt-unicode-9.22.tar.bz2
+$ cd rxvt-unicode-9.22
+$ ./configure --enable-everything --enable-256-color
+$ make
+# make install
+    </code></pre></div></div>
+    
+
+    <p>--enable-everything will compile all things for us except 256 color support. So keep that in mind.</p>
+    <p>So now rxvt-unicode is installed, just execute it. You won't like it out of the box. We have to configure it</p>
+
+    <h3>Configuration</h3>
+    <p>rxvt-unicode reads the configuration from two files, ~/.Xresources or ~/.Xdefaults. So here I'm gonna put my ~/.Xdefaults, just copy it to your home directory as ~/.Xdefaults.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+!  ▓▓▓▓▓▓▓▓▓▓
+! ░▓ Author ▓ Abdullah <https://abdullah.today/>
+! ░▓▓▓▓▓▓▓▓▓▓
+! ░░░░░░░░░░
+
+
+! Colors
+
+*.foreground:  #fffaf4
+*.background:  #0e1019
+*.cursorColor: #ff0018
+*.color0:      #232323
+*.color8:      #444444
+*.color1:      #ff000f
+*.color9:      #ff2740
+*.color2:      #8ce10b
+*.color10:     #abe15b
+*.color3:      #ffb900
+*.color11:     #ffd242
+*.color4:      #008df8
+*.color12:     #0092ff
+*.color5:      #6d43a6
+*.color13:     #9a5feb
+*.color6:      #00d8eb
+*.color14:     #67fff0
+*.color7:      #ffffff
+*.color15:     #ffffff
+*.colorBD:     #9e9c9a
+
+! Fonts
+
+URxvt*font:              -misc-tamzen-medium-r-normal--20-145-100-100-c-100-iso8859-1,\
+                        -misc-tamzenforpowerline-medium-r-normal--20-145-100-100-c-100-iso10646-1, \
+                        xterm: -misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1, \
+                        xft:PowerlineSymbols,\
+                        xft:FontAwesome:size=28:minspace=False,\
+                        xft:DejaVu Sans:pixelsize=18
+URxvt*boldFont:          -misc-tamzenforpowerline-bold-r-normal--20-145-100-100-c-100-iso8859-1, \
+                        xft:Inconsolata:bold:size=16:antialias=true, \
+                        xft:DejaVu Sans:bold:size=16:antialias=true, \
+                        xft:FontAwesome
+URxvt*termName:                       rxvt-unicode-256color
+URxvt*geometry:                       96x30
+URxvt*chdir:                          /home/abdullah
+URxvt*reverseVideo:                   0
+URxvt*loginShell:                     1
+URxvt*multiClickTime:                 0.1
+URxvt*jumpScroll:                     1
+URxvt*skipScroll:                     1
+URxvt*pastableTabs:                   1
+URxvt*scrollstyle:                    plain
+URxvt*scrollBar:                      0
+URxvt*scrollBar_right:                0
+URxvt*scrollBar_floating:             0
+URxvt*scrollBar_align:                centre
+URxvt*thickness:                      0
+URxvt*scrollTtyOutput:                0
+URxvt*scrollTtyKeypress:              1
+URxvt*scrollWithBuffer:               1
+URxvt*inheritPixmap:                  0
+URxvt*transparent:                    0
+URxvt*tintColor:                      #ffffff
+URxvt*shading:                        145
+URxvt*blurRadius:                     1x65
+URxvt*fading:                         25
+URxvt*fadeColor:                      #008B8B
+URxvt*utmpInhibit:                    1
+URxvt*urgentOnBell:                   1
+URxvt*visualBell:                     0
+URxvt*mapAlert:                       1
+URxvt*meta8:                          0
+URxvt*mouseWheelScrollPage:           0
+URxvt*tripleclickwords:               1
+URxvt*insecure:                       0
+URxvt*cursorUnderline:                1
+URxvt*cursorBlink:                    0
+URxvt*pointerBlank:                   1
+!URxvt*colorBD:                        color
+!URxvt*colorIT:                        color
+!URxvt*colorUL:                        color
+!URxvt*colorRV:                        color
+!URxvt*underlineColor:                 color
+!URxvt*scrollColor:                    color
+!URxvt*troughColor:                    color
+!URxvt*highlightColor:                 color
+!URxvt*highlightTextColor:             color
+!URxvt*cursorColor:                    color
+!URxvt*cursorColor2:                   color
+!URxvt*pointerColor:                   color
+!URxvt*pointerColor2:                  color
+!URxvt*borderColor:                    color
+URxvt*path:                           /home/abdullah/pix
+!URxvt*backgroundPixmap:               /home/abdullah/pix/bg.jpg;op=keep-aspect
+URxvt*iconFile:                       /usr/share/pixmaps/terminal-tango.svg
+URxvt*pointerShape:                   ul_angle
+!URxvt*italicFont:                     fontname
+!URxvt*boldItalicFont:                 fontname
+URxvt*intensityStyles:                1
+!URxvt*inputMethod:                    ibus
+!URxvt*preeditType:                    xim
+!URxvt*imLocale:                       ja_JP.EUC-JP
+!URxvt*imFont:                         xft:Fura Code for Powerline:17
+!URxvt*title:                          rxvt
+!URxvt*iconName:                       rxvt
+URxvt*saveLines:                      9999
+URxvt*buffered:                       1
+URxvt*depth:                          96
+URxvt*visual:                         0x20
+!URxvt*transient-for:
+URxvt*override-redirect:              0
+!URxvt*hold:                           1
+URxvt*externalBorder:                 15
+URxvt*internalBorder:                 15
+URxvt*borderLess:                     0
+URxvt*lineSpace:                      0
+URxvt*letterSpace:                    0
+URxvt*skipBuiltinGlyphs:              0
+URxvt*pointerBlankDelay:              1
+!URxvt*backspacekey:
+!URxvt*deletekey:
+URxvt*print-pipe:                     cat >  /tmp/$(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
+URxvt*modifier:
+URxvt*cutchars:                       \"()*,<>[]{}|''"\
+!URxvt*
+!URxvt*answerbackString:
+URxvt*secondaryScreen:                1
+URxvt*secondaryScroll:                1
+URxvt*perl-lib:                       /home/abdullah/.urxvt/ext
+!URxvt*perl-eval:
+!URxvt*perl-ext-common:
+!URxvt*perl-ext:
+URxvt*iso14755:                       1
+URxvt*iso14755_52:                    1
+!URxvt*xrm:
+!URxvt*keysym.sym:
+!URxvt*background.border:
+!URxvt*background.expr:
+!URxvt*background.interval:
+!URxvt*bell-command:
+!URxvt*kuake.hotkey:
+URxvt*matcher.button:                 1
+URxvt*url-launcher:               /usr/bin/google-chrome-stable
+URxvt*url-select.underline:            1
+!URxvt*matcher.launcher.*:
+!URxvt*matcher.pattern.*:
+!URxvt*matcher.rend.*:
+!URxvt*remote-clipboard.fetch:
+!URxvt*remote-clipboard.store:
+!URxvt*selection-autotransform.*:
+!URxvt*selection-pastebin.cmd:
+!URxvt*selection-pastebin.url:
+URxvt*selection.pattern-0:            ([[:word:]]+)
+!URxvt*tab-bg:
+!URxvt*tab-fg:
+!URxvt*tabbar-bg:
+!URxvt*tabbar-fg:
+URxvt*keysym.M-C-c:             selection:rot13
+!URxvt*keysym.M-s:               searchable-scrollback:start
+URxvt*perl-ext-common: vim
+URxvt*clipboar-autocopy:                1
+URxvt*vim-scrollback:                   M-s
+URxvt*vim-scrollback-paste:             M-p
+
+    </code></pre></div></div> 
+
+
+    <p>After copying the file, we have to load it.</p>
+   
+<div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code>$ xrdb -load ~/.Xdefaults
+    </code></pre></div></div>
+
+    <p>Now execute it. You may not have the fonts I use so maybe you face some errors. Just install those fonts or change them.</p>
+
+    <p>I also have written a post on <a href="https://theak.me/blog/how-to-manage-fonts-in-linux.html">How do I manage fonts</a> for easy management of fonts you like.</p>
+
+    <p>Still have problems? Just lemme know and I'll be happy to assist you.</p>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/0x5CBC7BC7" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://facebook.com/0x5CBC7BC7" title="Facebook">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="mailto:abdullah@abdullah.today?Subject=Mail%20from%20website" title="Email Me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyleft &copy; All rights reversed. The internet is free and so is my content.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

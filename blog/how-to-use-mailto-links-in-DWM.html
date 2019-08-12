@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-7480055858131493",
+        enable_page_level_ads: true
+      });
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to use mailto links in Windows Managers</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/clean-blog.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">AK</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scrots">Scrots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about.html">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/img/scrots/rxvt+.png')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>A workaround for mutt users</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p> I don't use some heavy desktop managers like gnome, kde. I prefer minimalistic setup with DWM windows manager. So I have to manage many things manualy. Today I came with a solution to those who have problems using terminal based mail client mutt or something like that. But they can't open it from some browser or terminal app. </p>
+
+
+
+
+
+
+
+
+            <p> There are lots of guides which were not working for most users. So here is how I made it work. Just create a script in /usr/bin and name it mailto. In this script type this. </p>
+
+
+
+
+            <div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># vim /usr/bin/mailto 
+
+#!/bin/sh
+
+$TERMINAL -e mutt "$@" 
+
+
+            </code></pre></div></div>
+
+
+
+
+            <p> You may use your terminal name like urxvt or whatever you use if $TERMINAL variable isn't set. </p>
+
+
+            <p> Install xdg-utils if you don't have already installed. It will install a tool, xdg-email. Open and edit it as root. In the end you will see a function 'detectDE' in this xdg-email script. Just remove that whole function and type mailto there. </p>
+
+
+            <div class="highlight-rouge"><div class="highlight"><pre class="highlight"><code># vim /usr/bin/xdg-email
+
+...
+
+if [ x"$DE" = x"" ]; then
+    # if BROWSER variable is not set, check some well known browsers instead
+    if [ x"$BROWSER" = x"" ]; then
+        BROWSER=mailto
+    fi
+    DE=generic
+fi
+
+
+...
+
+
+            </code></pre></div></div>
+
+
+            <p> That's it. Now open xdg-email someone@abdullah.today in terminal and it will open a mutt window. Enjoy. </p>
+
+            <!-- Footer -->
+            <footer>
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-8 col-md-10 mx-auto">
+                    <ul class="list-inline text-center">
+                      <li class="list-inline-item">
+                        <a href="https://twitter.com/0x5CBC7BC7" title="Twitter">
+                          <span class="fa-stack fa-lg">
+                            <i class="fas fa-circle fa-stack-2x"></i>
+                            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a href="https://facebook.com/0x5CBC7BC7" title="Facebook">
+                          <span class="fa-stack fa-lg">
+                            <i class="fas fa-circle fa-stack-2x"></i>
+                            <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a href="mailto:abdullah@abdullah.today?Subject=Mail%20from%20website" title="Email Me">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                    <p class="copyright text-muted">Copyleft &copy; All rights reversed. The internet is free and so is my content.</p>
+                  </div>
+                </div>
+              </div>
+            </footer>
+
+            <!-- Bootstrap core JavaScript -->
+            <script src="vendor/jquery/jquery.min.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+            <!-- Custom scripts for this template -->
+            <script src="js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>
